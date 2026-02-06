@@ -1,113 +1,221 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>BRAND</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>BRANDD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(180deg, #0a0f2c, #6a1b9a);
-  color: white;
-}
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0a0f2c" />
+  <link rel="apple-touch-icon" href="photo.jpg" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-/* SPLASH */
-#splash {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(180deg, #0a0f2c, #6a1b9a);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial, sans-serif;color:#fff;overflow:hidden;background:#000}
 
-#splash img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid rgba(255,255,255,0.5);
-  margin-bottom: 24px;
-}
+    /* SPLASH */
+    #splash{
+      position:fixed; inset:0;
+      display:flex; align-items:flex-end; justify-content:center;
+      padding:40px 20px;
+      background:#000;
+      z-index:10;
+      opacity:1;
+      transition:opacity .6s ease;
+    }
+    #splash.hide{opacity:0; pointer-events:none;}
 
-/* HARF HARF YAZI */
-#typewriter {
-  font-size: 22px;
-  letter-spacing: 2px;
-  text-align: center;
-  min-height: 60px;
-}
+    #bgPhoto{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      z-index:0;
+    }
+    #overlay{
+      position:absolute; inset:0;
+      background:linear-gradient(
+        to top,
+        rgba(0,0,0,.75) 0%,
+        rgba(0,0,0,.20) 55%,
+        rgba(0,0,0,.10) 100%
+      );
+      z-index:1;
+    }
+    .splash-content{
+      position:relative; z-index:2;
+      width:100%; max-width:650px;
+      text-align:center;
+    }
+    #typewriter{
+      font-size:22px;
+      letter-spacing:2px;
+      line-height:1.25;
+      min-height:56px;
+      text-shadow:0 2px 14px rgba(0,0,0,.65);
+    }
+    #enterBtn{
+      margin-top:18px;
+      padding:12px 26px;
+      border:none;
+      border-radius:30px;
+      background:rgba(255,255,255,.95);
+      color:#0a0f2c;
+      font-size:14px;
+      cursor:pointer;
+      opacity:0;
+      pointer-events:none;
+      transition:.35s;
+    }
+    #enterBtn.show{opacity:1; pointer-events:auto;}
 
-/* BUTON */
-#enterBtn {
-  margin-top: 30px;
-  padding: 12px 26px;
-  border: none;
-  border-radius: 30px;
-  background: white;
-  color: #0a0f2c;
-  font-size: 14px;
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.4s;
-}
+    /* CONTENT (2.sayfa) */
+    #content{
+      position:fixed; inset:0;
+      background:linear-gradient(180deg,#0a0f2c,#6a1b9a);
+      overflow:auto;
+      opacity:0;
+      transform:translateY(20px);
+      pointer-events:none;
+      transition:opacity .6s ease, transform .6s ease;
+    }
+    #content.show{
+      opacity:1;
+      transform:none;
+      pointer-events:auto;
+    }
 
-#enterBtn.show {
-  opacity: 1;
-  pointer-events: auto;
-}
+    header{
+      padding:18px 16px;
+      display:flex; align-items:center; gap:12px;
+      position:sticky; top:0;
+      background:rgba(10,15,44,.55);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.12);
+      z-index:5;
+    }
+    #backBtn{
+      border:1px solid rgba(255,255,255,.35);
+      background:rgba(0,0,0,.2);
+      color:#fff;
+      border-radius:12px;
+      padding:8px 12px;
+      cursor:pointer;
+    }
+    .brandTitle{font-weight:700; letter-spacing:3px; font-size:18px;}
 
-/* ANA İÇERİK */
-#content {
-  display: none;
-}
-</style>
+    section{max-width:700px; margin:0 auto; padding:18px 16px 40px;}
+    .card{
+      background:rgba(255,255,255,.12);
+      margin-bottom:14px;
+      padding:16px;
+      border-radius:16px;
+      animation:fadeUp .5s ease forwards;
+    }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .label{font-size:13px;opacity:.75}
+    .value{font-size:16px;margin-top:4px}
+  </style>
 </head>
 
 <body>
 
-<!-- SPLASH -->
-<div id="splash">
-  <img src="photo.jpg" alt="">
-  <div id="typewriter"></div>
-  <button id="enterBtn" onclick="enterSite()">Devam Et</button>
-</div>
+  <!-- SPLASH -->
+  <div id="splash">
+    <img id="bgPhoto" src="photo.jpg" alt="">
+    <div id="overlay"></div>
 
-<!-- ANA SAYFA -->
-<div id="content">
-  <h1 style="text-align:center;padding:40px;">BRAND ANA SAYFA</h1>
-</div>
+    <div class="splash-content">
+      <div id="typewriter"></div>
+      <button id="enterBtn" onclick="enterSite()">Devam Et</button>
+    </div>
+  </div>
 
-<script>
-const text = "BRANDD'IN DÜNYASINA HOŞ GELDİN";
-let i = 0;
-const speed = 80;
-const target = document.getElementById("typewriter");
-const btn = document.getElementById("enterBtn");
+  <!-- CONTENT -->
+  <div id="content">
+    <header>
+      <button id="backBtn" onclick="goBack()">← Geri</button>
+      <div class="brandTitle">BRANDD</div>
+    </header>
 
-function typeWriter() {
-  if (i < text.length) {
-    target.innerHTML += text.charAt(i);
-    i++;
-    setTimeout(typeWriter, speed);
-  } else {
-    setTimeout(() => {
-      btn.classList.add("show");
-    }, 5000);
-  }
-}
+    <section>
+      <div class="card"><div class="label">İsim</div><div class="value">Mesut Abak</div></div>
+      <div class="card"><div class="label">Aslen</div><div class="value">Mardin</div></div>
+      <div class="card"><div class="label">Doğup Büyüdüğü Yer</div><div class="value">Adana</div></div>
+      <div class="card"><div class="label">Yaş</div><div class="value">17</div></div>
+      <div class="card"><div class="label">Doğum Tarihi</div><div class="value">08.10.2008</div></div>
+      <div class="card"><div class="label">Boy</div><div class="value">193 cm</div></div>
+      <div class="card"><div class="label">Okuduğu Bölüm</div><div class="value">Otomasyon</div></div>
+      <div class="card"><div class="label">Hedef</div><div class="value">Yurt dışında iyi bir yazılımcı olmak</div></div>
 
-typeWriter();
+      <div class="card"><div class="label">Hobiler</div>
+        <div class="value">Gitar çalmak, müzik dinlemek, oyun oynamak, yağmurlu havada yürümek</div>
+      </div>
 
-function enterSite() {
-  document.getElementById("splash").style.display = "none";
-  document.getElementById("content").style.display = "block";
-}
-</script>
+      <div class="card"><div class="label">Favori Müzik Türleri</div>
+        <div class="value">Türkçe rap, metal</div>
+      </div>
 
+      <div class="card"><div class="label">Fobiler</div>
+        <div class="value">Küçük hayvanlar, klostrofobi</div>
+      </div>
+
+      <div class="card"><div class="label">Favori Yemek</div><div class="value">İçli köfte</div></div>
+      <div class="card"><div class="label">Favori İçecek</div><div class="value">Cola</div></div>
+      <div class="card"><div class="label">Favori Meyve</div><div class="value">Elma</div></div>
+      <div class="card"><div class="label">Favori Renkler</div><div class="value">Mor, lacivert</div></div>
+    </section>
+  </div>
+
+  <script>
+    /* Typewriter */
+    const text = "BRANDD'IN DÜNYASINA HOŞ GELDİN";
+    const speed = 75;
+    const btnDelay = 5000;
+    let i = 0;
+
+    const target = document.getElementById("typewriter");
+    const btn = document.getElementById("enterBtn");
+
+    function typeWriter() {
+      if (i < text.length) {
+        target.textContent += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, speed);
+      } else {
+        setTimeout(() => btn.classList.add("show"), btnDelay);
+      }
+    }
+    typeWriter();
+
+    /* Page transition */
+    const splash = document.getElementById("splash");
+    const content = document.getElementById("content");
+
+    function enterSite() {
+      splash.classList.add("hide");
+      setTimeout(() => {
+        content.classList.add("show");
+        document.body.style.overflow = "auto";
+      }, 600);
+    }
+
+    function goBack() {
+      content.classList.remove("show");
+      setTimeout(() => {
+        splash.classList.remove("hide");
+        document.body.style.overflow = "hidden";
+      }, 600);
+    }
+
+    /* Service worker register */
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js");
+      });
+    }
+  </script>
 </body>
 </html>
