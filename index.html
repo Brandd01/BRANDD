@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>BRAND</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(180deg, #0a0f2c, #6a1b9a);
+  color: white;
+}
+
+/* SPLASH */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, #0a0f2c, #6a1b9a);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#splash img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.5);
+  margin-bottom: 24px;
+}
+
+/* HARF HARF YAZI */
+#typewriter {
+  font-size: 22px;
+  letter-spacing: 2px;
+  text-align: center;
+  min-height: 60px;
+}
+
+/* BUTON */
+#enterBtn {
+  margin-top: 30px;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 30px;
+  background: white;
+  color: #0a0f2c;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.4s;
+}
+
+#enterBtn.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ANA İÇERİK */
+#content {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <img src="photo.jpg" alt="">
+  <div id="typewriter"></div>
+  <button id="enterBtn" onclick="enterSite()">Devam Et</button>
+</div>
+
+<!-- ANA SAYFA -->
+<div id="content">
+  <h1 style="text-align:center;padding:40px;">BRAND ANA SAYFA</h1>
+</div>
+
+<script>
+const text = "BRANDD'IN DÜNYASINA HOŞ GELDİN";
+let i = 0;
+const speed = 80;
+const target = document.getElementById("typewriter");
+const btn = document.getElementById("enterBtn");
+
+function typeWriter() {
+  if (i < text.length) {
+    target.innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeWriter, speed);
+  } else {
+    setTimeout(() => {
+      btn.classList.add("show");
+    }, 5000);
+  }
+}
+
+typeWriter();
+
+function enterSite() {
+  document.getElementById("splash").style.display = "none";
+  document.getElementById("content").style.display = "block";
+}
+</script>
+
+</body>
+</html>
